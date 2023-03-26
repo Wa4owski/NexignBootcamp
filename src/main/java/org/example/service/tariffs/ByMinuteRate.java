@@ -1,10 +1,11 @@
-package org.example.service;
+package org.example.service.tariffs;
 
 import org.example.model.Call;
 import org.example.model.CallReport;
 import org.example.model.CallType;
+import org.example.service.RateStrategy;
 
-public class ByMinuteRate implements RateStrategy{
+public class ByMinuteRate implements RateStrategy {
     private final double minutePrice = 1.5;
 
     @Override

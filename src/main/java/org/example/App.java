@@ -3,13 +3,14 @@ package org.example;
 import org.example.model.Call;
 import org.example.model.CallType;
 import org.example.model.Customer;
+import org.example.service.ReportGenerator;
 
-import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import java.util.Map;
 public class App 
 {
 
-    static SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMddHH24mmss");
+    static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     static Map<String, Customer> customers = new HashMap<>();
     static void parseCDR(String line) {
         String[] arg = line.split(", ");
@@ -40,8 +41,8 @@ public class App
             }
         }
         try {
-            LocalDateTime start = LocalDateTime.ofInstant(sdt.parse(arg[2]).toInstant(), ZoneId.systemDefault());
-            LocalDateTime end = LocalDateTime.ofInstant(sdt.parse(arg[3]).toInstant(), ZoneId.systemDefault());
+            LocalDateTime start = LocalDateTime.parse(arg[2], dtf);
+            LocalDateTime end = LocalDateTime.parse(arg[3], dtf);
             if(! (arg[0].equals("01") || arg[0].equals("02") ) ){
                 throw new IllegalAccessException("No such type of call");
             }
@@ -60,5 +61,9 @@ public class App
         while (bufferedReader.ready()){
             parseCDR(bufferedReader.readLine());
         }
+        for(Customer customer : customers.values()) {
+            ReportGenerator.generate(customer);
+        }
+        System.out.println("Reports were successfully generated!");
     }
 }

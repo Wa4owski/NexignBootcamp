@@ -2,9 +2,10 @@ package org.example.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.service.ByMinuteRate;
-import org.example.service.DefaultRate;
+import org.example.service.tariffs.ByMinuteRate;
+import org.example.service.tariffs.DefaultRate;
 import org.example.service.RateStrategy;
+import org.example.service.tariffs.Unlimit300;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +27,14 @@ public class Customer {
                 rate = new ByMinuteRate();
                 break;
             case 6:
-                //rate = n
+                rate = new Unlimit300();
                 break;
             case 11:
                 rate = new DefaultRate();
                 break;
             default:
-                throw new IllegalAccessException("No such rate");
-        };
+                throw new IllegalArgumentException("No such rate");
+        }
     }
 
     public void addCall(Call call){

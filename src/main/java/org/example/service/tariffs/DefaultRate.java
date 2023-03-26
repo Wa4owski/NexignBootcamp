@@ -1,17 +1,17 @@
-package org.example.service;
+package org.example.service.tariffs;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.Call;
 import org.example.model.CallReport;
 import org.example.model.CallType;
+import org.example.service.RateStrategy;
 
 @NoArgsConstructor
-public class DefaultRate implements RateStrategy{
+public class DefaultRate implements RateStrategy {
     private int cheapMinutesLeft = 100;
-    private double cheapMinutePrice = 0.5;
-
-    private double expensiveMinutePrice = 1.5;
+    private final double cheapMinutePrice = 0.5;
+    private final double expensiveMinutePrice = 1.5;
 
     @Override
     public CallReport resolveCall(Call call) {
@@ -27,6 +27,7 @@ public class DefaultRate implements RateStrategy{
             return report;
         }
         report.setCost(cheapMinutesLeft * cheapMinutePrice + (durationMinutes - cheapMinutesLeft) * expensiveMinutePrice);
+        cheapMinutesLeft = 0;
         return report;
     }
 }

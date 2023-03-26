@@ -19,7 +19,7 @@ public class CallReport extends Call{
     }
 
     public long calcAndSetDuration(){
-        long secondsDuration = Duration.between(ended, started).getSeconds();
+        long secondsDuration = Duration.between(started, ended).getSeconds();
         this.duration = LocalTime.ofSecondOfDay(secondsDuration);
         return (secondsDuration % 60 == 0 ? secondsDuration / 60 : secondsDuration / 60 + 1);
     }
